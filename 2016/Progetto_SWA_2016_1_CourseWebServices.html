@@ -1,0 +1,186 @@
+<!doctype html>
+
+<html><head>
+<meta charset="UTF-8"/>
+<title>Sviluppo Web Avanzato: Progetti di Fine Corso</title>
+<style>body { font-family: Cambria; font-size: 12pt; text-align: justify; margin: 2rem 5rem; } h1 { margin: 1rem -2rem; background-color: rgb(46,116,181); text-align:center; border-radius: 5px; font-size: 200%; font-weight: bold; color: white; padding: 5px; } h2 { font-size: 200%; font-weight: bold; margin-bottom: 1rem; } h3 { font-size: 140%; border-bottom: 1px solid black; margin-bottom: 1rem; margin-top: 2rem; font-weight: normal; } p, li { margin-bottom: 0.5rem; } ul,ol { margin-left: 0; padding-left: 1rem; } blockquote { margin-left: 0; font-style: italic; font-size: 110%; margin-top: 0.5rem; font-weight: normal; } ul > li::marker { content: '\2014 '; } table { width: 100%; border: 2px solid black; border-spacing: 0px; border-collapse: collapse; } td, th { border: 1px solid black; } .linetocompile { border-bottom: 0.5px solid gray; width: 100%; line-height: 2rem; } .break { page-break-before: always; } @media print { @page { size: A4; margin: 1cm; } body {margin: 0 2rem} h1 { margin: 1rem -1rem; } }</style>
+</head>
+<body>
+<h1>Corso di Sviluppo Web Avanzato<br/><em>Progetti A.A. 2016/2017</em> - Specifica 1</h1>
+<section class="specifica">
+<h2>Progetto &quot;CourseWebServices&quot;</h2>
+<blockquote>
+<p>Versione 1.0</p>
+</blockquote>
+<h3>Premessa</h3>
+<p>Il presente progetto estende un progetto del corso di Web
+Engineering. Per prima cosa, quindi, potrebbe essere utile leggere questa
+specifica di base. Tuttavia, non si dovrà realizzare la <em>web application</em> con
+tutte le funzionalità descritte nella specifica base, ma solo la relativa base
+di dati, a cui poi affiancare il servizio web RESTful che esporrà questi dati e
+alcune delle relative funzionalità di accesso e modifica. Si dovrà infine
+implementare, utilizzando HTML5 e JQuery, un semplicissimo client per questo
+servizio, utile anche a testarne la correttezza.</p>
+<p>Nota: il servizio richiesto realizza, in pratica, un
+disaccoppiamento della gestione dati (e di alcune funzionalità correlate), che
+risiede necessariamente sul server, dalla logica di business e dal rendering
+dell'interfaccia, che potrebbero essere totalmente gestite dal client con
+Javascript, come spesso accade nelle SPA (<em>single page application</em>,
+applicazioni a pagina singola).</p>
+<h3>Il Servizio</h3>
+<p>A partire dalla base di dati del progetto <em>CourseWeb</em>
+(che non dovete necessariamente realizzare ex novo se non siete studenti del
+corso di Web Engineering: siete liberi di usare il codice e il database
+realizzato da qualche vostro collega), si
+costruisca il servizio RESTful
+specificato di seguito. La logica del servizio potrà, opzionalmente, utilizzare
+una libreria ORM per accedere ai dati.</p>
+<section class="operazioni"><div>
+ <p>Note: nella specifica che segue gli elementi tra parentesi graffe sono <em>placeholder</em> , la parentesi quadre indicano elementi opzionali e le parentesi tonde, insieme al carattere <em>pipe</em> "|", sono utilizzate per indicare delle alternative. Se non altrimenti specificato, il formato dati per l'input e l'output è JSON, quindi andranno progettate opportune strutture per contenere al meglio i dati richiesti in questo formato.</p>
+ <h4>URL: auth/login</h4>
+ <h5>VERBO: POST</h5>
+ <p>Prende in input un oggetto contenente username e password di un utente e restituisce un oggetto contenente il relativo <em>token</em> di sessione/autenticazione.</p>
+ <h4>URL: auth/logout</h4>
+ <h5>VERBO: POST</h5>
+ <p>Prende in input un token di sessione/autenticazione e chiude la relativa sessione, invalidando il token.</p>
+ <h4>URL: auth/{SID}/users</h4>
+ <h5>VERBO: GET</h5>
+ <p>Restituisce la lista delle URI che rappresentano tutti agli utenti presenti nel sistema.</p>
+ <p>Esempio di output:</p>
+ <p><code>["http://courseweb.it/auth/123/users/1", "http://courseweb.it/auth/123/users/2", "http://courseweb.it/auth/123/users/3"]</code></p>
+ <p>L'operazione viene eseguita nel contesto della sessione con token {SID} e solo se l'utente associato è un amministratore (altrimenti potreste restituire un errore 403 - <em>Forbidden</em>).</p>
+ <h5>VERBO: POST</h5>
+ <p>Inserisce un nuovo utente nel sistema. L'oggetto passato come payload conterrà tutti i dati del profilo utente, ad esempio</p>
+ <p><code>{"username": "pinco", "password": "in_chiaro!"}</code></p>
+ <p>L'operazione viene eseguita nel contesto della sessione con token {SID} e solo se l'utente associato è un amministratore (altrimenti potreste restituire un errore 403 - <em>Forbidden</em>).</p>
+ <h4>URL: auth/{SID}/users/{ID}</h4>
+ <h5>VERBO: GET</h5>
+ <p>Restituisce il profilo dell'utente {ID} sotto forma dello stesso oggetto utilizzato come payload per l'inserimento (POST) tramite la URL auth/{SID}/users, ad esclusione della password.</p>
+ <p>L'operazione viene eseguita nel contesto della sessione con token {SID} e solo se l'utente associato è un amministratore (altrimenti potreste restituire un errore 403 - <em>Forbidden</em>).</p>
+ <h5>VERBO: PUT</h5>
+ <p>Aggiorna il profilo dell'utente {ID}. Il payload è lo stesso oggetto utilizzato per l'inserimento (POST) tramite la URL auth/{SID}/users.</p>
+ <p>L'operazione viene eseguita nel contesto della sessione con token {SID} e solo se l'utente associato è un amministratore (altrimenti potreste restituire un errore 403 - <em>Forbidden</em>).</p>
+ <h5>VERBO: DELETE</h5>
+ <p>Elimina il profilo dell'utente {ID}.</p>
+ <p>L'operazione viene eseguita nel contesto della sessione con token {SID} e solo se l'utente associato è un amministratore (altrimenti potreste restituire un errore 403 - <em>Forbidden</em>).</p>
+ <p><strong>Ognuna delle URL che seguono potrà essere preceduta dal prefisso auth/{SID}/, in cui {SID} è un token di sessione restituito da auth/login. Se presente, questo segmento farà sì che le operazioni richieste siano eseguite nel contesto della sessione con token {SID} e quindi</strong> <strong>con i permessi dell'utente associato. In assenza di questo prefisso, il sistema eseguirà le operazioni come se fossero richieste da un utente anonimo (con le relative restrizioni!).</strong> <em>Suggerimento: se strutturate bene il servizio, sarà semplice rispondere alle URL seguenti con o senza il prefisso di autenticazione usando lo spesso codice.</em></p>
+ <h4><span filter="">URL: courses/({YEAR}|current)?</span></h4>
+ <h5>VERBO: GET</h5>
+ <p>Restituisce la lista delle URI che rappresentano tutti i corsi presenti nel sistema, includendo solo quelli con informazioni associate all'anno accademico corrente (<em>current</em><span filter="">) o a quello specificato con {YEAR}. La lista potrà essere ulteriormente filtrata tramite la query string </span> che può contenere tutti i parametri previsti per la ricerca sul catalogo dei corsi nel progetto CourseWeb (ad esempio nome, codice, ecc.).</p>
+ <p>Esempi di output:</p>
+ <p>Per la URL <em>courses/current</em></p>
+ <p><code>["http://courseweb.it/courses/current/1", "http://courseweb.it/courses/current/2"]</code></p>
+ <p>Per la URL <em>courses/2015</em></p>
+ <p><code>["http://courseweb.it/courses/2015/1", "http://courseweb.it/courses/2015/3"]</code></p>
+ <p>Per la URL <em>auth/123/courses/2015</em></p>
+ <p><code>["http://courseweb.it/auth/123/courses/2015/1", "http://courseweb.it/auth/123/courses/2015/3"]</code></p>
+ <h5>VERBO: POST</h5>
+ <p>Inserisce un nuovo corso nel catalogo dell'anno accademico {YEAR} o in quello corrente (<em>current</em><span filter=""> ). Il payload è lo stesso oggetto restituito dalla lettura (GET) tramite la URL courses/({YEAR}|current)/{ID}. I filtri </span>, in questo caso, non sono ammessi (se presenti potreste restituire un errore 400 -- <em>Bad Request</em>).</p>
+ <h4>URL: courses/history/{ID}</h4>
+ <h5>VERBO: GET</h5>
+ <p>Restituisce la lista degli anni accademici per cui esistono informazioni relative al corso {ID} insieme alle URL necessarie ad accedervi, sotto forma di un oggetto JSON del tipo</p>
+ <p><code>[{"year":2015,url:"http://courseweb.it/courses/2015/1"},{"year":2016,url:"http://courseweb.it/courses/2016/1"}]</code></p>
+ <h4>URL: courses/({YEAR}|current)/{ID}[/it|/en]</h4>
+ <h5>VERBO: GET</h5>
+ <p>Restituisce tutte le informazioni inerenti il corso {ID} relative all'anno accademico corrente (<em>current</em> ) o a quello specificato con {YEAR}. Aggiungendo uno dei due suffissi /it o /en verranno restituite solo le informazioni presenti nella lingua corrispondente, altrimenti l'oggetto conterrà i dati in entrambe le lingue. <em>Dovrete progettare voi un formato JSON adeguato per entrambi i casi.</em></p>
+ <h4>URL: courses/({YEAR}|current)/{ID}</h4>
+ <h5>VERBO: PUT</h5>
+ <p>Aggiorna le informazioni inerenti il corso {ID} relative all'anno accademico {YEAR} o a quello corrente (<em>current</em>). Il payload è lo stesso oggetto restituito dalla lettura (GET) tramite la URL courses/({YEAR}|current)/{ID}.</p>
+ <h5>VERBO: DELETE</h5>
+ <p>Cancella il corso {ID} dal catalogo dell'anno accademico {YEAR} oppure da quello dell'anno accademico corrente (<em>current</em>).</p>
+ <h4>URL: courses/({YEAR}|current)/{ID}/basic[/it|/en]</h4>
+ <h5>VERBO: GET</h5>
+ <p>Restituisce un oggetto contenente le sole informazioni <em>di base</em> (così come descritte nella specifica del progetto CourseWeb), estratte dall'oggetto restituito dalla GET su courses/({YEAR}|current)/{ID}[/it|/en]</p>
+ <h4>URL: courses/({YEAR}|current)/{ID}/syllabus[/it|/en]</h4>
+ <h5>VERBO: GET</h5>
+ <p>Restituisce un oggetto con il solo sillabo/programma estratto dall'oggetto restituito dalla GET su courses/({YEAR}|current)/{ID}[/it|/en]</p>
+ <h4>URL: courses/({YEAR}|current)/{ID}/teachers</h4>
+ <h5>VERBO: GET</h5>
+ <p>Restituisce la lista dei docenti presenti nell'oggetto restituito dalla GET su courses/({YEAR}|current)/{ID}.</p>
+ <p>Esempio di output:</p>
+ <p><code>["Pinco Pallino","Paolino Paperino"]</code></p>
+ <h5>VERBO: PUT</h5>
+ <p>Aggiorna la lista dei docenti per il corso {ID} relativa all'anno accademico {YEAR} o a quello corrente (<em>current</em>). Il payload è lo stesso oggetto restituito dalla lettura (GET) tramite la URL courses/({YEAR}|current)/{ID}/teachers.</p>
+ <h4>URL: courses/({YEAR}|current)/{ID}/relations</h4>
+ <h5>VERBO: GET</h5>
+ <p>Restituisce la lista dei corsi in relazione con il corso {ID}, estratta dall'oggetto restituito dalla GET su courses/({YEAR}|current)/{ID}. L'oggetto restituito dovrà contenere tre liste di URI, rispettivamente per i corsi propedeutici, quelli mutuati e i moduli:</p>
+ <p><code>{"propedeutics": ["http://courseweb.it/courses/current/1", "http://courseweb.it/courses/current/2"\], "same": ["http://courseweb.it/courses/current/3"], "modules":[] }</code></p>
+ <h5>VERBO: PUT</h5>
+ <p>Aggiorna la lista dei corsi in relazione con il corso {ID} relativa all'anno accademico {YEAR} o a quello corrente (<em>current</em>). Il payload è lo stesso oggetto restituito dalla lettura (GET) tramite la URL courses/({YEAR}|current)/{ID}/relations.</p>
+ <h4>URL: courses/({YEAR}|current)/{ID}/links</h4>
+ <h5>VERBO: GET</h5>
+ <p>Restituisce i link relativi al corso {ID}, estratti dall'oggetto restituito dalla GET su courses/({YEAR}|current)/{ID}. L'oggetto restituito dovrà contenere tante chiavi quanti sono i tipi di link previsti dalla specifica:</p>
+ <p><code>{"homepage":"...", "forum":"...", "elearning":"...", resources:...""}</code></p>
+ <h5>VERBO: PUT</h5>
+ <p>Aggiorna i link relativi al corso {ID} per all'anno accademico {YEAR} o per quello corrente (<em>current</em>). Il payload è lo stesso oggetto restituito dalla lettura (GET) tramite la URL courses/({YEAR}|current)/{ID}/links.</p>
+</div></section>
+<p>Prestate attenzione alla <em>struttura delle URL</em>, che
+deve seguire per quanto possibile il paradigma collection-item, evidenziando le
+relazioni tra gli oggetti tramite nidificazione.</p>
+<p>Se alcune operazioni necessitano di accesso con
+autenticazione, potrete usare uno qualsiasi degli approcci visti a lezione per
+trasmettere il <em>token di sessione/autenticazione</em> , precedentemente
+ottenuto tramite la procedura (API) di login: ad esempio inserire un prefisso <em><span SID="">auth/</span></em>
+sulla URL o passare tale token tramite <em>cookie</em> o con l'header <em>Authentication</em>.</p>
+<h3>Il Client</h3>
+<p>Si crei un client HTML5/Javascript con il supporto di JQuery
+per il servizio appena descritto, sotto forma di una semplice <em>single page
+application</em> che utilizza AJAX per interagire col servizio mostrandone i
+dati opportunamente sulla pagina.</p>
+<section class="client"><div>
+ <p>Il client dovrà essere strutturato come segue:</p>
+ <ol>
+  <li>Un selettore permetterà di scegliere un anno accademico o l'opzione "corrente".</li>
+  <li>Un selettore permetterà di scegliere una lingua tra italiano e inglese.</li>
+  <li>Sarà visualizzata la lista dei corsi relativi all'anno accademico selezionato dal controllo al punto (1) con nome, codice, settore e docenti. I dettagli saranno mostrati nella lingua selezionata dal controllo al punto (2). <em>Per evitare eccessivo numero di chiamate al servizio, è opportuno paginare questa lista e caricare le informazioni su un corso (mettendole poi in una cache) solo quando viene richiesta la corrispondente pagina.</em></li>
+  <li>Selezionando un corso dalla lista al punto (3), in un'area specifica della pagina (o in un <em>dialog box modale</em>, ci sono ottimi plugin di JQuery per gestirli) verrà mostrato il sillabo corrispondente, sempre nella lingua selezionata dal controllo al punto (2).</li>
+ </ol>
+</div></section>
+<p>Questa è una specifica di base. Potete aggiungere altre
+funzionalità a vostra scelta che sfruttino le altre API del servizio, se
+volete, aumentando così il valore del progetto.</p>
+<p>Nota: normalmente, una SPA di una certa complessità andrebbe
+realizzata sfruttando framework di più alto livello come Angular o Vue.
+Tuttavia, per applicazioni semplici, l'uso di JQuery a basso livello risulta
+essere più pratico, in quanto l'uso di framework come AngularJS aggiunge un
+notevole overhead al progetto.</p>
+<section class="indicazioni break"><div>
+ <h1>Indicazioni per lo Sviluppo del Progetto</h1>
+ <h3>Tecnologie da utilizzare</h3>
+ <ul>
+  <li>Nel realizzare le pagine web, se necessarie, si utilizzi HTML5.</li>
+  <li>Per la programmazione lato <em>client</em>, oltre a JQuery, si possono liberamente includere nel progetto altre librerie e plugin, a patto che nella relazione siano citate e descritte.</li>
+  <li>Per la programmazione lato <em>server,</em> il servizio potrà essere realizzato in <em>JAVA</em> o <em>PHP.</em> Sviluppando in Java, si utilizzi preferibilmente un'implementazione di <em>JAX-RS</em> (come Jersey), che permette di realizzare servizi con una struttura più modulare. L'uso di framework come <em>Spring</em> per creare il servizio è ammesso, ma solo se il progetto dovrà essere integrato o esteso, ad esempio con quello di un altro corso. In PHP, invece, è possibile usare un framework come <em>Slim</em> o un altro a scelta.</li>
+ </ul>
+ <h3>Svolgimento e Documentazione del Progetto</h3>
+ <p>Le specifiche fornite potrebbero non risultare esaustive o completamente definite. Ogni funzionalità aggiunta o raffinata, anche tramite l'interazione con il committente o con gli utenti finali del sito, sarà adeguatamente valutata. Tutte le scelte progettuali vanno comunque discusse e motivate.</p>
+ <p>Il progetto, svolto secondo le linee guida date dalle specifiche, dovrà essere consegnato nella forma di una o più web application completamente funzionanti, i cui contenuti e le cui caratteristiche saranno valutati in sede d'esame. Le parti della specifica marcate come <em>opzionali</em>, se omesse, non renderanno il progetto insufficiente ma non gli permetteranno comunque di raggiungere il massimo dei voti. Nel caso si decida di realizzarle, non sarà necessario che siano perfette o complete, ma che dimostrino chiaramente il vostro impegno nell'affrontare una tematica avanzata.</p>
+ <p>La documentazione (<strong>in formato elettronico</strong>) che accompagna il progetto <strong>deve</strong> contenere almeno le seguenti informazioni:</p>
+ <ol>
+  <li>Indicazione delle <strong>dipendenze</strong> software (di quali librerie avete bisogno dal lato server e client?).</li>
+  <li>Indicazione delle <strong>funzionalità realizzate</strong> e di quelle eventualmente non realizzate. Descrizione dettagliata delle eventuali funzionalità extra o opzionali inserite nel progetto.</li>
+  <li><strong>Specifica dettagliata dell'API</strong> redatta in formato <em>OpenAPI</em> (ad esempio tramite il tool di <em>Swagger</em>, <a href="https://swagger.io/tools">https://swagger.io/tools</a>): per ogni operazione realizzata dovrete specificare 
+   <ul>
+    <li>la URL,</li>
+    <li>gli eventuali parametri, dove sono inseriti (nel path o nella query string) e i loro possibili valori,</li>
+    <li>il verbo HTTP usato,</li>
+    <li>il formato del payload di richiesta (se necessario),</li>
+    <li>i codici di stato http ritornati e, per ogni stato, il formato dell'output (se presente).</li>
+   </ul></li>
+ </ol>
+ <p>Per quel che riguarda il formato dei dati scambiati (payload e output) fornite sempre un esempio completo della struttura JSON che intendete usare.</p>
+ <p>Nel caso di gruppi di lavoro composti da più componenti, <em>il contributo effettivo offerto da ciascun componente</em> alla realizzazione finale <strong>deve</strong> essere descritto nella documentazione. In sede di esame, i responsabili potranno essere chiamati a riferire sugli aspetti loro delegati.</p>
+ <h3>Valutazione del Progetto</h3>
+ <p>Nel valutare il progetto consegnato saranno prese in considerazione le seguenti caratteristiche (in ordine di importanza):</p>
+ <ol>
+  <li>Rispetto delle specifiche.</li>
+  <li>Correttezza tecnica.</li>
+  <li>Uso appropriato delle tecnologie di base descritte nel corso.</li>
+ </ol>
+ <p>A questa valutazione si aggiungerà quella generale derivata dalla discussione del progetto in sede d'esame.</p>
+ <h3>Ulteriori Informazioni</h3>
+ <p>Questa specifica è disponibile in formato PDF sulla pagina web del corso di Sviluppo Web avanzato. Ulteriori informazioni e chiarimenti sulle specifiche possono essere richiesti direttamente via email all'indirizzo giuseppe.dellapenna@univaq.it.</p>
+ <p>Si ricorda che i progetti vanno svolti in <em>piccoli</em> gruppi. Eccezioni a questa regola andranno concordate direttamente col docente.</p>
+</div></section>
+</body>
+</html>

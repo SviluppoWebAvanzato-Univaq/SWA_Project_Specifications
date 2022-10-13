@@ -1,0 +1,157 @@
+<!doctype html>
+
+<html><head>
+<meta charset="UTF-8"/>
+<title>Sviluppo Web Avanzato: Progetti di Fine Corso</title>
+<style>body { font-family: Cambria; font-size: 12pt; text-align: justify; margin: 2rem 5rem; } h1 { margin: 1rem -2rem; background-color: rgb(46,116,181); text-align:center; border-radius: 5px; font-size: 200%; font-weight: bold; color: white; padding: 5px; } h2 { font-size: 200%; font-weight: bold; margin-bottom: 1rem; } h3 { font-size: 140%; border-bottom: 1px solid black; margin-bottom: 1rem; margin-top: 2rem; font-weight: normal; } p, li { margin-bottom: 0.5rem; } ul,ol { margin-left: 0; padding-left: 1rem; } blockquote { margin-left: 0; font-style: italic; font-size: 110%; margin-top: 0.5rem; font-weight: normal; } ul > li::marker { content: '\2014 '; } table { width: 100%; border: 2px solid black; border-spacing: 0px; border-collapse: collapse; } td, th { border: 1px solid black; } .linetocompile { border-bottom: 0.5px solid gray; width: 100%; line-height: 2rem; } .break { page-break-before: always; } @media print { @page { size: A4; margin: 1cm; } body {margin: 0 2rem} h1 { margin: 1rem -1rem; } }</style>
+</head>
+<body>
+<h1>Corso di Sviluppo Web Avanzato<br/><em>Progetti A.A. 2019/2020</em> - Specifica 1</h1>
+<section class="specifica">
+<h2>Progetto &quot;Guida TV services&quot;</h2>
+<blockquote>
+<p>Versione 1.0</p>
+</blockquote>
+<h3>Premessa</h3>
+<p>Il presente progetto estende un progetto del corso di Web
+Engineering. Per prima cosa, quindi, potrebbe essere utile leggere questa
+specifica di base. Tuttavia, non si dovrà realizzare la <em>web application</em> con
+tutte le funzionalità descritte nella specifica base, ma solo la relativa base
+di dati, a cui poi affiancare il servizio web RESTful che esporrà questi dati e
+alcune delle relative funzionalità di accesso e modifica. Si dovrà infine
+implementare, utilizzando HTML5 e JQuery, un semplicissimo client per questo
+servizio, utile anche a testarne la correttezza.</p>
+<p>Nota: il servizio richiesto realizza, in pratica, un
+disaccoppiamento della gestione dati (e di alcune funzionalità correlate), che
+risiede necessariamente sul server, dalla logica di business e dal rendering
+dell'interfaccia, che potrebbero essere totalmente gestite dal client con
+Javascript, come spesso accade nelle SPA (<em>single page application</em>,
+applicazioni a pagina singola).</p>
+<h3>Il Servizio</h3>
+<p>A partire dalla base di dati del progetto *Guida TV *
+(che non dovete necessariamente realizzare ex novo se non siete studenti del
+corso di Web Engineering: siete liberi di usare il codice e il database
+realizzato da qualche vostro collega), si
+costruisca il servizio RESTful
+specificato di seguito. La logica del servizio potrà, opzionalmente, utilizzare
+una libreria ORM per accedere ai dati.</p>
+<section class="operazioni"><div>
+ <p>Nota: nella specifica che segue gli elementi tra parentesi graffe sono <em>placeholder</em> , le parentesi quadre indicano elementi opzionali e le parentesi tonde, insieme al carattere <em>pipe</em> "|", sono utilizzate per indicare delle alternative. Se non altrimenti specificato, il formato dati per l'input e l'output è JSON, quindi andranno progettate opportune strutture per contenere al meglio i dati richiesti.</p>
+ <h4>URL: auth</h4>
+ <h5>VERBO: POST</h5>
+ <p>Prende in input un oggetto contenente username e password di un utente e restituisce un oggetto contenente il relativo <em>token</em> di sessione/autenticazione.</p>
+ <h4>URL: auth/{SID}</h4>
+ <h5>VERBO: DELETE</h5>
+ <p>Chiude la sessione relativa al token di sessione/autenticazione {SID}, invalidandolo.</p>
+ <h4>URL: canali</h4>
+ <h5>VERBO: GET</h5>
+ <p>Restituisce una lista contenente i nomi di tutti i canali presenti nel sistema, la relativa ID e la URI necessaria per leggerne il palinsesto odierno.</p>
+ <p>Esempi di output:</p>
+ <p><code>[{"nome":"Rai 1", "id":1, "url":"http://miaguidatv.it/palinsesto/20190711/1"},{"nome":"Canale 5", "id":2, "url":" http://miaguidatv.it/palinsesto/20190711/2"}]</code></p>
+ <h4>URL: auth/{SID}/canali</h4>
+ <h5>VERBO: POST</h5>
+ <p>Inserisce un nuovo canale nel database. Il payload dovrà essere una struttura contente tutti i dati richiesti dal database per questo tipo di elemento, come risulta dalla specifica del progetto <em>Guida TV</em> . In output ci sarà la URL necessaria a leggere i dati del palinsesto del canale appena inserito. L'operazione viene eseguita nel contesto della sessione con token {SID} ed è disponibile solo se l'utente associato è l'amministratore. Tutti gli altri riceveranno un errore 403 - <em>Forbidden</em>.</p>
+ <h4>URL: canali/{ID}/palinsesto</h4>
+ <h5>VERBO: GET</h5>
+ <p>E' un alias per palinsesto/&lt;data odierna&gt;/{ID}.</p>
+ <h4>URL: canali/{ID}/palinsesto/{DATA}</h4>
+ <h5>VERBO: GET</h5>
+ <p>E' un alias per palinsesto/{DATA}/{ID}.</p>
+ <h4>URL: auth/{SID}/canali/{ID}</h4>
+ <h5>VERBO: PUT</h5>
+ <p>Modifica i dati del canale identificato da {ID}. Il payload potrà essere lo stesso usato per l'inserimento (POST) sulla URL auth/{SID}/canali. L'operazione viene eseguita nel contesto della sessione con token {SID} ed è disponibile solo se l'utente associato è l'amministratore. Tutti gli altri riceveranno un errore 403 - <em>Forbidden</em>.</p>
+ <h4>URL: palinsesto/{DATA}</h4>
+ <h5>VERBO: GET</h5>
+ <p>Restituisce il palinsesto di tutti i canali per la data {DATA}. Definite un formato JSON di output che strutturi bene tutte le informazioni necessarie, compresa la URL di dettaglio di ciascun programma: ricordate, infatti, che nel palinsesto non devono essere presenti tutti i dettagli di ciascun programma (si veda la specifica del progetto <em>Guida TV</em> ). Se la richiesta riguarda una data non disponibile, si restituisca un errore 404 - <em>Not Found</em>.</p>
+ <h4>URL: palinsesto/{DATA}/{CANALE}</h4>
+ <h5>VERBO: GET</h5>
+ <p>Restituisce il palinsesto del canale {CANALE} per la data {DATA}. Se la richiesta riguarda una data o un canale non disponibili, si restituisca un errore 404 - <em>Not Found</em>.</p>
+ <h4>URL: palinsesto? {FILTER}[first={m}[&amp;last={n}]]</h4>
+ <h5>VERBO: GET</h5>
+ <p>Esegue una ricerca per tutti i programmi nel database che corrispondono ai criteri della query string {FILTER} che può contenere tutti i parametri previsti per la ricerca di programmi specificati dal progetto <em>Guida TV</em> (ad esempio titolo, genere, canali, ecc.). Nota: poiché una ricerca senza criteri non ha senso, il servizio dovrà respingere ogni richiesta che non contenga almeno un filtro.</p>
+ <p>Restituisce la lista delle URL necessarie ad accedere al dettaglio di tutti i programmi corrispondenti ai criteri.</p>
+ <p>Poiché gli elementi della lista potrebbero essere molti, adotteremo una <em>strategia di paginazione</em> . Includendo i parametri <em>first</em> ed eventualmente <em>last</em> , la lista conterrà solo gli elementi dal numero <em>m</em> al numero <em>n</em> inclusi (supponendo qualche tipo di ordinamento tra gli elementi, magari per data). Omettendo <em>last</em> , verranno restituiti tutti gli elementi dal numero <em>m</em> all'ultimo. Omettendo entrambi i parametri verrà restituita la lista completa.</p>
+ <h4>URL: programmi/{ID}</h4>
+ <h5>VERBO: GET</h5>
+ <p>Restituisce tutti i dettagli relativi al programma indentificato da {ID} (titolo, descrizione, data/ora/canale di messa in onda, ecc).</p>
+ <h4>URL: auth/{SID}/programmi</h4>
+ <h5>VERBO: POST</h5>
+ <p>Inserisce un nuovo programma nel database. Il payload dovrà essere una struttura contente tutti i dati richiesti dal database per questo tipo di elemento, come risulta dalla specifica del progetto <em>Guida TV</em> . In output, come da standard, ci sarà la URL necessaria a leggere il dettaglio del programma appena inserito. L'operazione viene eseguita nel contesto della sessione con token {SID} ed è disponibile solo se l'utente associato è l'amministratore. Tutti gli altri riceveranno un errore 403 - <em>Forbidden</em>.</p>
+ <h4>URL: auth/{SID}/programmi/{ID}</h4>
+ <h5>VERBO: PUT</h5>
+ <p>Modifica i dati del programma identificato da {ID}. Il payload potrà essere lo stesso usato per l'inserimento (POST) sulla URL auth/{SID}/programmi. L'operazione viene eseguita nel contesto della sessione con token {SID} ed è disponibile solo se l'utente associato è l'amministratore. Tutti gli altri riceveranno un errore 403 - <em>Forbidden</em>.</p>
+ <h4>URL: programmi/{ID}/episodi</h4>
+ <h5>VERBO: GET</h5>
+ <p>Se il programma indentificato da {ID} è parte di una serie, restituisce una struttura contenente i dati di messa in onda di tutti gli episodi di questa serie in un periodo che va da trenta giorni nel passato a sette giorni nel futuro. Se il programma non ha una serie associata, è possibile restituire un errore 400 - <em>Bad Request</em>.</p>
+ <p><em>Opzionalmente</em> , provate a scrivere una procedura che popoli il database dei palinsesti attingendo ai servizi REST di vere emittenti televisive. Ad esempio, per la RAI, la URL <a href="https://www.raiplay.it/palinsesto/app/old/28-10-2019/canali.json">https://www.raiplay.it/palinsesto/app/old/28-10-2019/canali.json</a> restituisce il palinsesto di tutte le reti per la data specificata (attenzione: usate una data recente, altrimenti riceverete un <em>not found</em>).</p>
+ <p>Come vedrete, alcune URL contengono un segmento "<em>auth/{SID}"</em> : questo realizza un semplice schema di autenticazione che useremo per verificare le autorizzazioni necessarie a eseguire certe operazioni. Tutte le URL senza il prefisso <em>auth/{SID}</em> corrispondono a operazioni accessibili agli anonimi. Ove presente, invece, questo prefisso indica che la URL deve contenere un <em>token di sessione/autenticazione</em>, precedentemente ottenuto tramite un POST sulla URL <em>auth</em>, che simula un vero e proprio login, associando al token restituito i dati dell'utente autenticato.</p>
+</div></section>
+<p>Prestate attenzione alla <em>struttura delle URL</em>, che
+deve seguire per quanto possibile il paradigma collection-item, evidenziando le
+relazioni tra gli oggetti tramite nidificazione.</p>
+<p>Se alcune operazioni necessitano di accesso con
+autenticazione, potrete usare uno qualsiasi degli approcci visti a lezione per
+trasmettere il <em>token di sessione/autenticazione</em> , precedentemente
+ottenuto tramite la procedura (API) di login: ad esempio inserire un prefisso <em><span SID="">auth/</span></em>
+sulla URL o passare tale token tramite <em>cookie</em> o con l'header <em>Authentication</em>.</p>
+<h3>Il Client</h3>
+<p>Si crei un client HTML5/Javascript con il supporto di JQuery
+per il servizio appena descritto, sotto forma di una semplice <em>single page
+application</em> che utilizza AJAX per interagire col servizio mostrandone i
+dati opportunamente sulla pagina.</p>
+<section class="client"><div>
+ <p>Il client dovrà essere strutturato come segue:</p>
+ <ol>
+  <li>Un selettore permetterà di scegliere un canale.</li>
+  <li>Sarà visualizzata una pagina col palinsesto odierno del canale.</li>
+  <li>Cliccando su un programma del palinsesto, si aprirà una pagina (o un popup) con i relativi dettagli.</li>
+ </ol>
+</div></section>
+<p>Questa è una specifica di base. Potete aggiungere altre
+funzionalità a vostra scelta che sfruttino le altre API del servizio, se
+volete, aumentando così il valore del progetto.</p>
+<p>Nota: normalmente, una SPA di una certa complessità andrebbe
+realizzata sfruttando framework di più alto livello come Angular o Vue.
+Tuttavia, per applicazioni semplici, l'uso di JQuery a basso livello risulta
+essere più pratico, in quanto l'uso di framework come AngularJS aggiunge un
+notevole overhead al progetto.</p>
+<section class="indicazioni break"><div>
+ <h1>Indicazioni per lo Sviluppo del Progetto</h1>
+ <h3>Tecnologie da utilizzare</h3>
+ <ul>
+  <li>Nel realizzare le pagine web, se necessarie, si utilizzi HTML5.</li>
+  <li>Per la programmazione lato <em>client</em>, oltre a JQuery, si possono liberamente includere nel progetto altre librerie e plugin, a patto che nella relazione siano citate e descritte.</li>
+  <li>Per la programmazione lato <em>server,</em> il servizio potrà essere realizzato in <em>JAVA</em> o <em>PHP.</em> Sviluppando in Java, si utilizzi preferibilmente un'implementazione di <em>JAX-RS</em> (come Jersey), che permette di realizzare servizi con una struttura più modulare. L'uso di framework come <em>Spring</em> per creare il servizio è ammesso, ma solo se il progetto dovrà essere integrato o esteso, ad esempio con quello di un altro corso. In PHP, invece, è possibile usare un framework come <em>Slim</em> o un altro a scelta.</li>
+ </ul>
+ <h3>Svolgimento e Documentazione del Progetto</h3>
+ <p>Le specifiche fornite potrebbero non risultare esaustive o completamente definite. Ogni funzionalità aggiunta o raffinata, anche tramite l'interazione con il committente o con gli utenti finali del sito, sarà adeguatamente valutata. Tutte le scelte progettuali vanno comunque discusse e motivate.</p>
+ <p>Il progetto, svolto secondo le linee guida date dalle specifiche, dovrà essere consegnato nella forma di una o più web application completamente funzionanti, i cui contenuti e le cui caratteristiche saranno valutati in sede d'esame. Le parti della specifica marcate come <em>opzionali</em>, se omesse, non renderanno il progetto insufficiente ma non gli permetteranno comunque di raggiungere il massimo dei voti. Nel caso si decida di realizzarle, non sarà necessario che siano perfette o complete, ma che dimostrino chiaramente il vostro impegno nell'affrontare una tematica avanzata.</p>
+ <p>La documentazione (<strong>in formato elettronico</strong>) che accompagna il progetto <strong>deve</strong> contenere almeno le seguenti informazioni:</p>
+ <ol>
+  <li>Indicazione delle <strong>dipendenze</strong> software (di quali librerie avete bisogno dal lato server e client?).</li>
+  <li>Indicazione delle <strong>funzionalità realizzate</strong> e di quelle eventualmente non realizzate. Descrizione dettagliata delle eventuali funzionalità extra o opzionali inserite nel progetto.</li>
+  <li><strong>Specifica dettagliata dell'API</strong> redatta in formato <em>OpenAPI</em> (ad esempio tramite il tool di <em>Swagger</em>, <a href="https://swagger.io/tools">https://swagger.io/tools</a>): per ogni operazione realizzata dovrete specificare 
+   <ul>
+    <li>la URL,</li>
+    <li>gli eventuali parametri, dove sono inseriti (nel path o nella query string) e i loro possibili valori,</li>
+    <li>il verbo HTTP usato,</li>
+    <li>il formato del payload di richiesta (se necessario),</li>
+    <li>i codici di stato http ritornati e, per ogni stato, il formato dell'output (se presente).</li>
+   </ul></li>
+ </ol>
+ <p>Per quel che riguarda il formato dei dati scambiati (payload e output) fornite sempre un esempio completo della struttura JSON che intendete usare.</p>
+ <p>Nel caso di gruppi di lavoro composti da più componenti, <em>il contributo effettivo offerto da ciascun componente</em> alla realizzazione finale <strong>deve</strong> essere descritto nella documentazione. In sede di esame, i responsabili potranno essere chiamati a riferire sugli aspetti loro delegati.</p>
+ <h3>Valutazione del Progetto</h3>
+ <p>Nel valutare il progetto consegnato saranno prese in considerazione le seguenti caratteristiche (in ordine di importanza):</p>
+ <ol>
+  <li>Rispetto delle specifiche.</li>
+  <li>Correttezza tecnica.</li>
+  <li>Uso appropriato delle tecnologie di base descritte nel corso.</li>
+ </ol>
+ <p>A questa valutazione si aggiungerà quella generale derivata dalla discussione del progetto in sede d'esame.</p>
+ <h3>Ulteriori Informazioni</h3>
+ <p>Questa specifica è disponibile in formato PDF sulla pagina web del corso di Sviluppo Web avanzato. Ulteriori informazioni e chiarimenti sulle specifiche possono essere richiesti direttamente via email all'indirizzo giuseppe.dellapenna@univaq.it.</p>
+ <p>Si ricorda che i progetti vanno svolti in <em>piccoli</em> gruppi. Eccezioni a questa regola andranno concordate direttamente col docente.</p>
+</div></section>
+</body>
+</html>

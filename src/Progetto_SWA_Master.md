@@ -66,11 +66,15 @@ per il servizio appena descritto, sotto forma di una semplice *single page
 application* che utilizza AJAX per interagire col servizio mostrandone i
 dati opportunamente sulla pagina.
 
+<#if (body_client??)>
+
 <section class="client">${body_client?no_esc}</section>
 
 Questa è una specifica di base. Potete aggiungere altre
 funzionalità a vostra scelta che sfruttino le altre API del servizio, se
 volete, aumentando così il valore del progetto.
+
+</#if>
 
 Nota: normalmente, una SPA di una certa complessità andrebbe
 realizzata sfruttando framework di più alto livello come Angular o Vue.
