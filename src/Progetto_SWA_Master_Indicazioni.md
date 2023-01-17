@@ -68,8 +68,8 @@ dalla discussione del progetto in sede d'esame.
 
 ### Ulteriori Informazioni
 
-Questa specifica è disponibile in formato PDF sulla pagina
-web del corso di Sviluppo Web avanzato. Ulteriori informazioni e chiarimenti
+Questa specifica è disponibile nel repository del corso di Sviluppo Web Avanzato, 
+all'indirizzo https://github.com/SviluppoWebAvanzato-Univaq/SWA_Project_Specifications. Ulteriori informazioni e chiarimenti
 sulle specifiche possono essere richiesti direttamente via email all'indirizzo giuseppe.dellapenna@univaq.it.
 
 Si ricorda che i progetti vanno svolti in *piccoli*
