@@ -1,0 +1,117 @@
+<!doctype html>
+
+<html><head>
+<meta charset="UTF-8"/>
+<title>Sviluppo Web Avanzato: Progetti di Fine Corso</title>
+<style>body { font-family: Cambria; font-size: 12pt; text-align: justify; margin: 2rem 5rem; } h1 { margin: 1rem -2rem; background-color: rgb(46,116,181); text-align:center; border-radius: 5px; font-size: 200%; font-weight: bold; color: white; padding: 5px; } h2 { font-size: 200%; font-weight: bold; margin-bottom: 1rem; } h3 { font-size: 140%; border-bottom: 1px solid black; margin-bottom: 1rem; margin-top: 2rem; font-weight: normal; } p, li { margin-bottom: 0.5rem; } ul,ol { margin-left: 0; padding-left: 1rem; } blockquote { margin-left: 0; font-style: italic; font-size: 110%; margin-top: 0.5rem; font-weight: normal; } ul > li::marker { content: '\2014 '; } table { width: 100%; border: 2px solid black; border-spacing: 0px; border-collapse: collapse; } td, th { border: 1px solid black; } .linetocompile { border-bottom: 0.5px solid gray; width: 100%; line-height: 2rem; } .break { page-break-before: always; } @media print { @page { size: A4; margin: 1cm; } body {margin: 0 2rem} h1 { margin: 1rem -1rem; } }</style>
+</head>
+<body>
+<h1>Corso di Sviluppo Web Avanzato<br/><em>Progetti A.A. 2022/2023</em> - Specifica 1</h1>
+<section class="specifica">
+<h2>Progetto &quot;AuleWeb Services&quot;</h2>
+<blockquote>
+<p>Versione 1.0</p>
+</blockquote>
+<h3>Premessa</h3>
+<p>Il presente progetto estende un progetto del corso di Web
+Engineering. Per prima cosa, quindi, potrebbe essere utile leggere questa
+specifica di base. Tuttavia, non si dovrà realizzare la <em>web application</em> con
+tutte le funzionalità descritte nella specifica base, ma solo la relativa base
+di dati, a cui poi affiancare il servizio web RESTful che esporrà questi dati e
+alcune delle relative funzionalità di accesso e modifica. Si dovrà infine
+implementare, utilizzando HTML5 e JQuery, un semplicissimo client per questo
+servizio, utile anche a testarne la correttezza.</p>
+<p>Nota: il servizio richiesto realizza, in pratica, un
+disaccoppiamento della gestione dati (e di alcune funzionalità correlate), che
+risiede necessariamente sul server, dalla logica di business e dal rendering
+dell'interfaccia, che potrebbero essere totalmente gestite dal client con
+Javascript, come spesso accade nelle SPA (<em>single page application</em>,
+applicazioni a pagina singola).</p>
+<h3>Il Servizio</h3>
+<p>A partire dalla base di dati del progetto <em>AuleWeb</em>
+(che non dovete necessariamente realizzare ex novo se non siete studenti del
+corso di Web Engineering: siete liberi di usare il codice e il database
+realizzato da qualche vostro collega), si
+costruisca il servizio RESTful
+specificato di seguito. La logica del servizio potrà, opzionalmente, utilizzare
+una libreria ORM per accedere ai dati.</p>
+<section class="operazioni"><div>
+ <ol>
+  <li>Login/logout con username e password (per gli amministratori).</li>
+  <li>Esportazione e importazione CSV configurazione aule.</li>
+  <li>Inserimento di una nuova aula.</li>
+  <li>Assegnazione di un'aula a un gruppo.</li>
+  <li>Lettura delle informazioni di base relative a un'aula.</li>
+  <li>Lista delle attrezzature presenti in un'aula.</li>
+  <li>Inserimento di un nuovo evento.</li>
+  <li>Modifica di un evento.</li>
+  <li>Lettura delle informazioni su un evento.</li>
+  <li>Lista degli eventi associati a una specifica aula in una determinata settimana.</li>
+  <li>Lista degli eventi attuali e quelli delle prossime tre ore.</li>
+  <li>Esportazione di tutti gli eventi relativi a un certo intervallo di tempo, possibilmente in formato iCalendar (ad esempio usando https://github.com/ical4j/ical4j).</li>
+ </ol>
+</div></section>
+<p>Prestate attenzione alla <em>struttura delle URL</em>, che
+deve seguire per quanto possibile il paradigma collection-item, evidenziando le
+relazioni tra gli oggetti tramite nidificazione.</p>
+<p>Se alcune operazioni necessitano di accesso con
+autenticazione, potrete usare uno qualsiasi degli approcci visti a lezione per
+trasmettere il <em>token di sessione/autenticazione</em> , precedentemente
+ottenuto tramite la procedura (API) di login: ad esempio inserire un prefisso <em><span SID="">auth/</span></em>
+sulla URL o passare tale token tramite <em>cookie</em> o con l'header <em>Authentication</em>.</p>
+<h3>Il Client</h3>
+<p>Si crei un client HTML5/Javascript con il supporto di JQuery
+per il servizio appena descritto, sotto forma di una semplice <em>single page
+application</em> che utilizza AJAX per interagire col servizio mostrandone i
+dati opportunamente sulla pagina.</p>
+<section class="client"><div>
+ <p>In particolare, il client dovrà permettere di inserire i parametri e visualizzare le informazioni derivanti dalle operazioni "Lista degli eventi associati a una specifica aula in una determinata settimana” e “Lista degli eventi attuali e quelli delle prossime tre ore".</p>
+</div></section>
+<p>Questa è una specifica di base. Potete aggiungere altre
+funzionalità a vostra scelta che sfruttino le altre API del servizio, se
+volete, aumentando così il valore del progetto.</p>
+<p>Nota: normalmente, una SPA di una certa complessità andrebbe
+realizzata sfruttando framework di più alto livello come Angular o Vue.
+Tuttavia, per applicazioni semplici, l'uso di JQuery a basso livello risulta
+essere più pratico, in quanto l'uso di framework come AngularJS aggiunge un
+notevole overhead al progetto.</p>
+<section class="indicazioni break"><div>
+ <h1>Indicazioni per lo Sviluppo del Progetto</h1>
+ <h3>Tecnologie da utilizzare</h3>
+ <ul>
+  <li>Nel realizzare le pagine web, se necessarie, si utilizzi HTML5.</li>
+  <li>Per la programmazione lato <em>client</em>, oltre a JQuery, si possono liberamente includere nel progetto altre librerie e plugin, a patto che nella relazione siano citate e descritte.</li>
+  <li>Per la programmazione lato <em>server,</em> il servizio potrà essere realizzato in <em>JAVA</em> o <em>PHP.</em> Sviluppando in Java, si utilizzi preferibilmente un'implementazione di <em>JAX-RS</em> (come Jersey), che permette di realizzare servizi con una struttura più modulare. L'uso di framework come <em>Spring</em> per creare il servizio è ammesso, ma solo se il progetto dovrà essere integrato o esteso, ad esempio con quello di un altro corso. In PHP, invece, è possibile usare un framework come <em>Slim</em> o un altro a scelta.</li>
+ </ul>
+ <h3>Svolgimento e Documentazione del Progetto</h3>
+ <p>Le specifiche fornite potrebbero non risultare esaustive o completamente definite. Ogni funzionalità aggiunta o raffinata, anche tramite l'interazione con il committente o con gli utenti finali del sito, sarà adeguatamente valutata. Tutte le scelte progettuali vanno comunque discusse e motivate.</p>
+ <p>Il progetto, svolto secondo le linee guida date dalle specifiche, dovrà essere consegnato nella forma di una o più web application completamente funzionanti, i cui contenuti e le cui caratteristiche saranno valutati in sede d'esame. Le parti della specifica marcate come <em>opzionali</em>, se omesse, non renderanno il progetto insufficiente ma non gli permetteranno comunque di raggiungere il massimo dei voti. Nel caso si decida di realizzarle, non sarà necessario che siano perfette o complete, ma che dimostrino chiaramente il vostro impegno nell'affrontare una tematica avanzata.</p>
+ <p>La documentazione (<strong>in formato elettronico</strong>) che accompagna il progetto <strong>deve</strong> contenere almeno le seguenti informazioni:</p>
+ <ol>
+  <li>Indicazione delle <strong>dipendenze</strong> software (di quali librerie avete bisogno dal lato server e client?).</li>
+  <li>Indicazione delle <strong>funzionalità realizzate</strong> e di quelle eventualmente non realizzate. Descrizione dettagliata delle eventuali funzionalità extra o opzionali inserite nel progetto.</li>
+  <li><strong>Specifica dettagliata dell'API</strong> redatta in formato <em>OpenAPI</em> (ad esempio tramite il tool di <em>Swagger</em>, <a href="https://swagger.io/tools">https://swagger.io/tools</a>): per ogni operazione realizzata dovrete specificare 
+   <ul>
+    <li>la URL,</li>
+    <li>gli eventuali parametri, dove sono inseriti (nel path o nella query string) e i loro possibili valori,</li>
+    <li>il verbo HTTP usato,</li>
+    <li>il formato del payload di richiesta (se necessario),</li>
+    <li>i codici di stato http ritornati e, per ogni stato, il formato dell'output (se presente).</li>
+   </ul></li>
+ </ol>
+ <p>Per quel che riguarda il formato dei dati scambiati (payload e output) fornite sempre un esempio completo della struttura JSON che intendete usare.</p>
+ <p>Nel caso di gruppi di lavoro composti da più componenti, <em>il contributo effettivo offerto da ciascun componente</em> alla realizzazione finale <strong>deve</strong> essere descritto nella documentazione. In sede di esame, i responsabili potranno essere chiamati a riferire sugli aspetti loro delegati.</p>
+ <h3>Valutazione del Progetto</h3>
+ <p>Nel valutare il progetto consegnato saranno prese in considerazione le seguenti caratteristiche (in ordine di importanza):</p>
+ <ol>
+  <li>Rispetto delle specifiche.</li>
+  <li>Correttezza tecnica.</li>
+  <li>Uso appropriato delle tecnologie di base descritte nel corso.</li>
+ </ol>
+ <p>A questa valutazione si aggiungerà quella generale derivata dalla discussione del progetto in sede d'esame.</p>
+ <h3>Ulteriori Informazioni</h3>
+ <p>Questa specifica è disponibile nel repository del corso di Sviluppo Web Avanzato, all'indirizzo https://github.com/SviluppoWebAvanzato-Univaq/SWA_Project_Specifications. Ulteriori informazioni e chiarimenti sulle specifiche possono essere richiesti direttamente via email all'indirizzo giuseppe.dellapenna@univaq.it.</p>
+ <p>Si ricorda che i progetti vanno svolti in <em>piccoli</em> gruppi. Eccezioni a questa regola andranno concordate direttamente col docente.</p>
+</div></section>
+</body>
+</html>
