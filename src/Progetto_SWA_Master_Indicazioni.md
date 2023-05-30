@@ -2,17 +2,16 @@
 
 ### Tecnologie da utilizzare
 
-- Nel realizzare le pagine web, se necessarie, si utilizzi HTML5.
-- Per la programmazione lato *client*, oltre a JQuery, si
-possono liberamente includere nel progetto altre librerie e plugin, a patto che
-nella relazione siano citate e descritte.
-- Per la programmazione lato *server,* il servizio potrà
-essere realizzato in *JAVA* o *PHP.* Sviluppando in Java, si utilizzi
+- Per la programmazione del *server*, si potranno utilizzare
+JAVA (consigliato) o PHP. Sviluppando in Java, si utilizzi
 preferibilmente un'implementazione di *JAX-RS* (come Jersey), che permette
 di realizzare servizi con una struttura più modulare. L'uso di framework come *Spring*
 per creare il servizio è ammesso, ma solo se il progetto dovrà essere integrato
 o esteso, ad esempio con quello di un altro corso. In PHP, invece, è possibile
 usare un framework come *Slim* o un altro a scelta.  
+- Per la programmazione del *client*, si possono utilizzare Javascript con o senza JQuery (consigliato),
+ma anche Java e PHP. Si Possono liberamente includere nel progetto altre librerie e plugin, a patto che
+nella relazione siano citate e descritte.
 
 ### Svolgimento e Documentazione del Progetto
 
