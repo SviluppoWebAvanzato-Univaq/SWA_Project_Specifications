@@ -19,18 +19,14 @@
 Il presente progetto estende un progetto del corso di Web
 Engineering. Per prima cosa, quindi, potrebbe essere utile leggere questa
 specifica di base. Tuttavia, non si dovrà realizzare la *web application* con
-tutte le funzionalità descritte nella specifica base, ma solo la relativa base
-di dati, a cui poi affiancare il servizio web RESTful che esporrà questi dati e
-alcune delle relative funzionalità di accesso e modifica. Si dovrà infine
-implementare, utilizzando HTML5 e JQuery, un semplicissimo client per questo
-servizio, utile anche a testarne la correttezza.
-
-Nota: il servizio richiesto realizza, in pratica, un
-disaccoppiamento della gestione dati (e di alcune funzionalità correlate), che
-risiede necessariamente sul server, dalla logica di business e dal rendering
-dell'interfaccia, che potrebbero essere totalmente gestite dal client con
-Javascript, come spesso accade nelle SPA (*single page application*,
-applicazioni a pagina singola).  
+tutte le funzionalità descritte nella specifica base. Lo scopo del corso, infatti,
+è insegnare a *progettare, specificare formalmente e sviluppare servizi*, intesi come
+Web API RESTful: la logica di business sottostante il servizio, quindi, non è di nostro
+interesse, e potrà essere implementata in maniera molto prototipale. Sarà quindi 
+effettivamente necessario implementare solo le strutture dati su cui poi costruire 
+il servizio web RESTful che esporrà tali dati e alcune delle relative funzionalità 
+di accesso e modifica. Si dovrà infine implementare un semplicissimo client per
+questo servizio, utile anche a testarne la correttezza.
 
 ### Il Servizio
 
